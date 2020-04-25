@@ -11,16 +11,20 @@ import uk.gergely.kiss.configurationprovider.controllers.model.ConfigurationRequ
 import uk.gergely.kiss.configurationprovider.security.vo.UserDetailsVO;
 
 @RestController
-@RequestMapping("/cm/admin")
+@RequestMapping("/rest")
 public class AdminController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
     @PostMapping(value = "/{operationId}",
                     consumes = MediaType.APPLICATION_JSON_VALUE,
                     produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity management(@PathVariable String operationId, @AuthenticationPrincipal UserDetailsVO userDetailsVO, ConfigurationRequest configurationRequest){
+    public ResponseEntity management(@PathVariable String operationId, @AuthenticationPrincipal UserDetailsVO userDetailsVO){
         LOGGER.info(userDetailsVO.getUsername());
-        configurationRequest.getConfigurations().values().forEach((value)->LOGGER.warn("{}", value));
-        return new ResponseEntity(operationId, HttpStatus.OK);
+        return new ResponseEntity( HttpStatus.OK);
+    }
+    @GetMapping
+    public ResponseEntity mng(@AuthenticationPrincipal UserDetailsVO userDetailsVO){
+        LOGGER.info(userDetailsVO.getUsername());
+        return new ResponseEntity(userDetailsVO.getUsername(), HttpStatus.OK);
     }
 }
