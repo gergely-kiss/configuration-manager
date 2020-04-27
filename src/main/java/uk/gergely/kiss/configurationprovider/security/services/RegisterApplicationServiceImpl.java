@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gergely.kiss.configurationprovider.repository.RegisteredApplicationEntityRepository;
 import uk.gergely.kiss.configurationprovider.repository.entity.RegisteredApplicationEntity;
+import uk.gergely.kiss.configurationprovider.security.resources.SecurityConstants;
 
 import javax.management.openmbean.KeyAlreadyExistsException;
 import javax.persistence.NoResultException;
@@ -24,21 +25,22 @@ public class RegisterApplicationServiceImpl implements RegisterApplicationServic
     }
 
     @Override
-    public RegisteredApplicationEntity register(String name) {
-        return register(name, passwordManagerService.encode(UUID.randomUUID().toString()));
+    public RegisteredApplicationEntity register(String name, String password) {
+        return register(name, password, SecurityConstants.ROLE_APPLICATION);
     }
 
     @Override
-    public RegisteredApplicationEntity register(String name, String password) {
+    public RegisteredApplicationEntity register(String name, String password, String role) {
         if (isApplicationAlreadyRegistered(name)) {
             throw new KeyAlreadyExistsException();
         }
-        return registeredApplicationEntityRepository.save(new RegisteredApplicationEntity(name, passwordManagerService.encode(password)));
+
+        return registeredApplicationEntityRepository.save(new RegisteredApplicationEntity(name, passwordManagerService.encode(password), role));
     }
 
     @Override
-    public void unRegister(RegisteredApplicationEntity registeredApplicationEntity) {
-        registeredApplicationEntityRepository.delete(registeredApplicationEntity);
+    public void unRegister(String appId) {
+        registeredApplicationEntityRepository.deleteById(appId);
     }
 
     @Override

@@ -17,5 +17,8 @@ public class RegisteredApplicationEntity {
     @Column
     private String password;
 
+    @Column
+    private String role;
+
 
 }

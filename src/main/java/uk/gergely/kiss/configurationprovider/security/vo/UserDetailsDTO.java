@@ -3,29 +3,34 @@ package uk.gergely.kiss.configurationprovider.security.vo;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import uk.gergely.kiss.configurationprovider.repository.entity.RegisteredApplicationEntity;
 
 import java.util.Arrays;
 import java.util.Collection;
 
-public class UserDetailsVO implements UserDetails {
+public class UserDetailsDTO implements UserDetails {
     private String userName;
+    private String password;
+    private String role;
 
-    public UserDetailsVO(String userName){
+    public UserDetailsDTO(String userName){
         this.userName = userName;
     }
 
-    public UserDetailsVO() {
+    public UserDetailsDTO(RegisteredApplicationEntity registeredApplicationEntity) {
+        this.userName = registeredApplicationEntity.getApplicationId();
+        this.password = registeredApplicationEntity.getPassword();
+        this.role = registeredApplicationEntity.getRole();
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Arrays.asList(new SimpleGrantedAuthority("ROLE_MAJOM"));
+        return Arrays.asList(new SimpleGrantedAuthority(role));
     }
 
     @Override
     public String getPassword() {
-        return new BCryptPasswordEncoder().encode("admin");
+        return password;
     }
 
     @Override

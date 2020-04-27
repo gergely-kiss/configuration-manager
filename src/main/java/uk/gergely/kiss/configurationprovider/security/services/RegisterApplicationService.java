@@ -6,10 +6,10 @@ import java.util.Set;
 
 public interface RegisterApplicationService {
 
-    RegisteredApplicationEntity register(String name);
-    void unRegister(RegisteredApplicationEntity registeredApplicationEntity);
-    RegisteredApplicationEntity findByApplicationId(String registeredApplicationId);
+    RegisteredApplicationEntity register(String appId, String password);
+    void unRegister(String appId);
+    RegisteredApplicationEntity findByApplicationId(String appId);
     Set<RegisteredApplicationEntity> findAll();
     RegisteredApplicationEntity updatePassword(RegisteredApplicationEntity registeredApplicationEntity, String newPassword);
-    RegisteredApplicationEntity register(String defaultAppName, String defaultPassword);
+    RegisteredApplicationEntity register(String defaultAppName, String defaultPassword, String role);
 }
