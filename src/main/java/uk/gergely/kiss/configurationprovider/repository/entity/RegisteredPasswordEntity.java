@@ -11,11 +11,9 @@ import javax.persistence.*;
 @ToString
 @Entity(name = "registered_password")
 public class RegisteredPasswordEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
 
-    @Column
-    private String password;
+    @Id
+    @Column(name = "application_info")
+    private String applicationInfo;
 
 }

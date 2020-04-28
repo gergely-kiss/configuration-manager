@@ -29,4 +29,8 @@ public class ControllerConstants {
     public static final String PASSWORD = "password";
 
     public static final String SUCCESS = "success";
+    public static final String INFO = "info";
+    public static final String CONFIGURATION_LIST = "configuration_list";
+    public static final String CONFIGURATION_KEY = "configuration_key";
+    public static final String CONFIGURATION_VALUE = "configuration_value";
 }

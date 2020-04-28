@@ -10,16 +10,15 @@ import javax.management.openmbean.KeyAlreadyExistsException;
 import javax.persistence.NoResultException;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 
 @Service
-public class RegisterApplicationServiceImpl implements RegisterApplicationService {
+public class RegisteredApplicationServiceImpl implements RegisteredApplicationService {
 
     private final RegisteredApplicationEntityRepository registeredApplicationEntityRepository;
     private final PasswordManagerService passwordManagerService;
 
     @Autowired
-    public RegisterApplicationServiceImpl(RegisteredApplicationEntityRepository registeredApplicationEntityRepository, PasswordManagerService passwordManagerService) {
+    public RegisteredApplicationServiceImpl(RegisteredApplicationEntityRepository registeredApplicationEntityRepository, PasswordManagerService passwordManagerService) {
         this.registeredApplicationEntityRepository = registeredApplicationEntityRepository;
         this.passwordManagerService = passwordManagerService;
     }
@@ -34,7 +33,7 @@ public class RegisterApplicationServiceImpl implements RegisterApplicationServic
         if (isApplicationAlreadyRegistered(name)) {
             throw new KeyAlreadyExistsException();
         }
-
+        passwordManagerService.savePlainPassword(password);
         return registeredApplicationEntityRepository.save(new RegisteredApplicationEntity(name, passwordManagerService.encode(password), role));
     }
 

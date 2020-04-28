@@ -13,7 +13,8 @@ import javax.persistence.*;
 public class ConfigurationEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
     private Integer id;
     @Column(name = "application_id")
     private String applicationId;

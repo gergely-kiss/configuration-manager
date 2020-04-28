@@ -4,7 +4,7 @@ import uk.gergely.kiss.configurationprovider.repository.entity.RegisteredApplica
 
 import java.util.Set;
 
-public interface RegisterApplicationService {
+public interface RegisteredApplicationService {
 
     RegisteredApplicationEntity register(String appId, String password);
     void unRegister(String appId);

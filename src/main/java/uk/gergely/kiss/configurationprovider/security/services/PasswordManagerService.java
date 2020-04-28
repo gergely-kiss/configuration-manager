@@ -7,5 +7,6 @@ public interface PasswordManagerService {
     String encode(String plainPassword);
     boolean isMatch(String plainPassword, String encodedPassword);
     List<String> getAllPlanPassword();
+    void savePlainPassword(String planPassword);
 
 }

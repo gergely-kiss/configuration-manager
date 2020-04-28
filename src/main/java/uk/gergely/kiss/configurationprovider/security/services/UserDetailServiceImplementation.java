@@ -10,15 +10,15 @@ import uk.gergely.kiss.configurationprovider.security.vo.UserDetailsDTO;
 @Service
 public class UserDetailServiceImplementation implements UserDetailsService {
 
-    private final RegisterApplicationService registerApplicationService;
+    private final RegisteredApplicationService registeredApplicationService;
 
     @Autowired
-    public UserDetailServiceImplementation(RegisterApplicationService registerApplicationService) {
-        this.registerApplicationService = registerApplicationService;
+    public UserDetailServiceImplementation(RegisteredApplicationService registeredApplicationService) {
+        this.registeredApplicationService = registeredApplicationService;
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return new UserDetailsDTO(registerApplicationService.findByApplicationId(username));
+        return new UserDetailsDTO(registeredApplicationService.findByApplicationId(username));
     }
 }
