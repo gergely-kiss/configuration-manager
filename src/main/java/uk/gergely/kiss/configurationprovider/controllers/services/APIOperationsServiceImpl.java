@@ -4,9 +4,8 @@ import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import uk.gergely.kiss.configurationprovider.controllers.resources.ControllerConstants;
-import uk.gergely.kiss.configurationprovider.security.services.ConfigurationService;
+import uk.gergely.kiss.configurationprovider.repository.PropertyService;
 import uk.gergely.kiss.configurationprovider.security.services.PasswordManagerService;
 import uk.gergely.kiss.configurationprovider.security.services.RegisteredApplicationService;
 
@@ -16,13 +15,13 @@ public class APIOperationsServiceImpl implements APIOperationsService {
 
     private final RegisteredApplicationService registeredApplicationService;
     private final PasswordManagerService passwordManagerService;
-    private final ConfigurationService configurationService;
+    private final PropertyService propertyService;
 
     private final Logger LOGGER = LoggerFactory.getLogger(APIOperationsService.class);
-    public APIOperationsServiceImpl(RegisteredApplicationService registeredApplicationService, PasswordManagerService passwordManagerService, ConfigurationService configurationService) {
+    public APIOperationsServiceImpl(RegisteredApplicationService registeredApplicationService, PasswordManagerService passwordManagerService, PropertyService propertyService) {
         this.registeredApplicationService = registeredApplicationService;
         this.passwordManagerService = passwordManagerService;
-        this.configurationService = configurationService;
+        this.propertyService = propertyService;
     }
 
     @Override
@@ -63,18 +62,18 @@ public class APIOperationsServiceImpl implements APIOperationsService {
     private JSONObject getAllConfig(JSONObject request) {
         validatePropertyKey(request, ControllerConstants.APP_ID);
         JSONObject response = new JSONObject();
-        response.put(String.valueOf(request.get(ControllerConstants.APP_ID)), configurationService.getAllConfigurationByAppId(String.valueOf(request.get(ControllerConstants.APP_ID))));
+       // response.put(String.valueOf(request.get(ControllerConstants.APP_ID)), configurationService.getAllConfigurationByAppId(String.valueOf(request.get(ControllerConstants.APP_ID))));
         return response;
     }
 
     private JSONObject removeConfig(JSONObject request) {
         validatePropertyKey(request, ControllerConstants.APP_ID);
         validatePropertyKey(request, ControllerConstants.CONFIGURATION_KEY);
-        configurationService.deleteConfig(String.valueOf(request.get(ControllerConstants.CONFIGURATION_KEY)), String.valueOf(request.get(ControllerConstants.APP_ID)));
+        //configurationService.deleteConfig(String.valueOf(request.get(ControllerConstants.CONFIGURATION_KEY)), String.valueOf(request.get(ControllerConstants.APP_ID)));
         return new JSONObject();
     }
 
-    private void saveConfig(JSONObject request) {
+    public void saveConfig(JSONObject request) {
         validatePropertyKey(request, ControllerConstants.APP_ID);
         validatePropertyKey(request, ControllerConstants.CONFIGURATION_KEY);
         validatePropertyKey(request, ControllerConstants.CONFIGURATION_VALUE);
@@ -82,7 +81,7 @@ public class APIOperationsServiceImpl implements APIOperationsService {
         LOGGER.info("String.valueOf(request.get(ControllerConstants.CONFIGURATION_VALUE)) {}", String.valueOf(request.get(ControllerConstants.CONFIGURATION_VALUE)));
         LOGGER.info("String.valueOf(request.get(ControllerConstants.APP_ID)) {}", String.valueOf(request.get(ControllerConstants.APP_ID)));
         LOGGER.info("saveConfig {}", request);
-        configurationService.saveConfiguration(String.valueOf(request.get(ControllerConstants.CONFIGURATION_KEY)), String.valueOf(request.get(ControllerConstants.CONFIGURATION_VALUE)), String.valueOf(request.get(ControllerConstants.APP_ID)));
+        propertyService.save(String.valueOf(request.get(ControllerConstants.CONFIGURATION_KEY)), String.valueOf(request.get(ControllerConstants.CONFIGURATION_VALUE)), String.valueOf(request.get(ControllerConstants.APP_ID)));
     }
 
     private void updatePassword(JSONObject request) {
@@ -97,7 +96,7 @@ public class APIOperationsServiceImpl implements APIOperationsService {
         registeredApplicationService.findAll().forEach(registeredApplicationEntity -> {
             JSONObject app = new JSONObject();
             app.put(ControllerConstants.APP_ID, registeredApplicationEntity.getApplicationId());
-            app.put(ControllerConstants.CONFIGURATION_LIST, configurationService.getAllConfigurationByAppId(registeredApplicationEntity.getApplicationId()));
+       //     app.put(ControllerConstants.CONFIGURATION_LIST, configurationService.getAllConfigurationByAppId(registeredApplicationEntity.getApplicationId()));
             response.put(registeredApplicationEntity.getApplicationId(), app);
         });
         return response;

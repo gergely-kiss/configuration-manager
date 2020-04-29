@@ -5,12 +5,12 @@ create table registered_application
     role varchar(255)
 );
 
-create table configuration
+create table app_property
 (
     id serial not null primary key,
-    application_id varchar(255) not null,
-    key varchar(255),
-    value varchar(255)
+    app_id varchar(255) not null,
+    property_key varchar(255),
+    property_value varchar(255)
 );
 
 create table registered_password
