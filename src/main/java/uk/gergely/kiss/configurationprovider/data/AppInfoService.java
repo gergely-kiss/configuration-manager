@@ -1,8 +1,8 @@
-package uk.gergely.kiss.configurationprovider.security.services;
+package uk.gergely.kiss.configurationprovider.data;
 
 import java.util.List;
 
-public interface PasswordManagerService {
+public interface AppInfoService {
 
     String encode(String plainPassword);
     boolean isMatch(String plainPassword, String encodedPassword);
