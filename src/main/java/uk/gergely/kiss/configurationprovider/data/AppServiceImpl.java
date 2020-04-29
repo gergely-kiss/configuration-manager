@@ -22,17 +22,17 @@ public class AppServiceImpl implements AppService {
     }
 
     @Override
-    public AppEntity register(String name, String password) {
-        return register(name, password, SecurityConstants.ROLE_APPLICATION);
+    public AppEntity register(String appID, String appInfo) {
+        return register(appID, appInfo, SecurityConstants.ROLE_APPLICATION);
     }
 
     @Override
-    public AppEntity register(String name, String password, String role) {
-        if (isApplicationAlreadyRegistered(name)) {
+    public AppEntity register(String appID, String appInfo, String role) {
+        if (isApplicationAlreadyRegistered(appID)) {
             throw new KeyAlreadyExistsException();
         }
-        appInfoService.savePlainPassword(password);
-        return repository.save(new AppEntity(name, appInfoService.encode(password), role));
+        appInfoService.savePlainPassword(appInfo);
+        return repository.save(new AppEntity(appID, appInfoService.encode(appInfo), role));
     }
 
     @Override
@@ -41,8 +41,8 @@ public class AppServiceImpl implements AppService {
     }
 
     @Override
-    public AppEntity findByApplicationId(String registeredApplicationId) {
-        return repository.findById(registeredApplicationId).orElseThrow(()-> new NoResultException("No application find by application name: " + registeredApplicationId));
+    public AppEntity findByApplicationId(String appID) {
+        return repository.findById(appID).orElseThrow(()-> new NoResultException("No application find by application name: " + appID));
     }
 
     @Override
@@ -59,8 +59,8 @@ public class AppServiceImpl implements AppService {
     }
 
 
-    private boolean isApplicationAlreadyRegistered(String name) {
-        return repository.findAll().stream().filter(registeredApplicationEntity -> name.equalsIgnoreCase(registeredApplicationEntity.getAppId())).findAny().isPresent();
+    private boolean isApplicationAlreadyRegistered(String appName) {
+        return repository.findAll().stream().anyMatch(registeredApplicationEntity -> appName.equalsIgnoreCase(registeredApplicationEntity.getAppId()));
     }
 
 }

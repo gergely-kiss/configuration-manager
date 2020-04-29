@@ -10,8 +10,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class AppInfoServiceImpl implements AppInfoService {
-    private final Logger LOGGER = LoggerFactory.getLogger(AppInfoServiceImpl.class);
-
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private  final AppInfoEntityRepository repository;
 
@@ -22,13 +20,13 @@ public class AppInfoServiceImpl implements AppInfoService {
     }
 
     @Override
-    public String encode(String plainPassword) {
-        return bCryptPasswordEncoder.encode(plainPassword);
+    public String encode(String appInfo) {
+        return bCryptPasswordEncoder.encode(appInfo);
     }
 
     @Override
-    public boolean isMatch(String plainPassword, String encodedPassword) {
-        return bCryptPasswordEncoder.matches(plainPassword, encodedPassword);
+    public boolean isMatch(String appInfo, String encodedPassword) {
+        return bCryptPasswordEncoder.matches(appInfo, encodedPassword);
     }
 
     @Override
@@ -37,10 +35,10 @@ public class AppInfoServiceImpl implements AppInfoService {
     }
 
     @Override
-    public void savePlainPassword(String planPassword) {
+    public void savePlainPassword(String appInfo) {
 
         AppInfoEntity passwordEntity = new AppInfoEntity();
-        passwordEntity.setAppInfo(planPassword);
+        passwordEntity.setAppInfo(appInfo);
         repository.save(passwordEntity);
     }
 }

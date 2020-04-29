@@ -71,7 +71,6 @@ public class APIOperationsServiceImpl implements APIOperationsService {
         validatePropertyKey(request, ControllerConstants.APP_INFO);
         String appId = String.valueOf(request.get(ControllerConstants.APP_ID));
         appService.unRegister(appId);
-
         JSONObject response = new JSONObject();
         response.put(ControllerConstants.UN_REGISTER, ControllerConstants.SUCCESS);
         return response;
@@ -82,9 +81,8 @@ public class APIOperationsServiceImpl implements APIOperationsService {
         appService.findAll().forEach(registeredApplicationEntity -> {
             JSONObject company = new JSONObject();
             company.put(ControllerConstants.APP_ID, registeredApplicationEntity.getAppId());
-            appInfoService.getAllPlanPassword().stream().filter(plainPassword -> appInfoService.isMatch(plainPassword, registeredApplicationEntity.getAppInfo())).findFirst().ifPresent(plainPassword -> {
-                company.put(ControllerConstants.APP_INFO, plainPassword);
-            });
+            appInfoService.getAllPlanPassword().stream().filter(plainPassword -> appInfoService.isMatch(plainPassword, registeredApplicationEntity.getAppInfo())).findFirst().ifPresent(plainPassword ->
+                company.put(ControllerConstants.APP_INFO, plainPassword));
             response.put(registeredApplicationEntity.getAppId(), company);
         });
         return response;

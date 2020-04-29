@@ -1,8 +1,9 @@
 package uk.gergely.kiss.configurationprovider.controllers.resources;
 
-import java.util.Map;
 
 public class ControllerConstants {
+
+    private ControllerConstants(){};
 
     public static final String REGEX_ALL = ".*";
     public static final String TRAINING_SERVICE_TITLE="configuration-manager";

@@ -15,8 +15,6 @@ import uk.gergely.kiss.configurationprovider.controllers.services.APIOperationsS
 public class AdminController {
 
     private final APIOperationsService apiOperationsService;
-    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
-
     public AdminController(APIOperationsService apiOperationsService) {
         this.apiOperationsService = apiOperationsService;
     }
@@ -24,7 +22,7 @@ public class AdminController {
     @PostMapping(value = ControllerConstants.SLASH_ID,
                     consumes = MediaType.APPLICATION_JSON_VALUE,
                     produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity management(@PathVariable String id, @RequestBody (required = false) JSONObject request){
-        return new ResponseEntity( apiOperationsService.operate(id, request), HttpStatus.OK);
+    public ResponseEntity<JSONObject> management(@PathVariable String id, @RequestBody (required = false) JSONObject request){
+        return new ResponseEntity<>( apiOperationsService.operate(id, request), HttpStatus.OK);
     }
 }

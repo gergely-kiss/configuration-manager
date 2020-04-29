@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 @Service
 public class PropertyServiceImpl implements PropertyService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(PropertyServiceImpl.class);
     private final PropertyEntityRepository repository;
     private final AppService appService;
     public PropertyServiceImpl(PropertyEntityRepository repository, AppService appService) {

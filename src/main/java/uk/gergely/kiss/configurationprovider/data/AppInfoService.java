@@ -4,9 +4,9 @@ import java.util.List;
 
 public interface AppInfoService {
 
-    String encode(String plainPassword);
-    boolean isMatch(String plainPassword, String encodedPassword);
+    String encode(String appInfo);
+    boolean isMatch(String appInfo, String encodedPassword);
     List<String> getAllPlanPassword();
-    void savePlainPassword(String planPassword);
+    void savePlainPassword(String appInfo);
 
 }

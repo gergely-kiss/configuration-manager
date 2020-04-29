@@ -3,10 +3,10 @@ import java.util.Set;
 
 public interface AppService {
 
-    AppEntity register(String appId, String password);
+    AppEntity register(String appId, String appInfo);
     void unRegister(String appId);
     AppEntity findByApplicationId(String appId);
     Set<AppEntity> findAll();
     AppEntity updatePassword(AppEntity appEntity, String newPassword);
-    AppEntity register(String defaultAppName, String defaultPassword, String role);
+    AppEntity register(String appName, String appInfo, String role);
 }
