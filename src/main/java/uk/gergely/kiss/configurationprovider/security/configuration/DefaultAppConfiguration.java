@@ -4,28 +4,28 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import uk.gergely.kiss.configurationprovider.repository.entity.RegisteredApplicationEntity;
+import uk.gergely.kiss.configurationprovider.data.AppEntity;
 import uk.gergely.kiss.configurationprovider.security.resources.SecurityConstants;
-import uk.gergely.kiss.configurationprovider.security.services.RegisteredApplicationService;
+import uk.gergely.kiss.configurationprovider.data.AppService;
 import javax.persistence.NoResultException;
 
 @Component
 public class DefaultAppConfiguration {
-    private final RegisteredApplicationService registeredApplicationService;
+    private final AppService appService;
     private static final Logger LOGGER = LoggerFactory.getLogger(DefaultAppConfiguration.class);
     @Autowired
-    public DefaultAppConfiguration(RegisteredApplicationService registeredApplicationService) {
-        this.registeredApplicationService = registeredApplicationService;
+    public DefaultAppConfiguration(AppService appService) {
+        this.appService = appService;
     }
 
     public void registerDefaultApplication(){
-        RegisteredApplicationEntity defaultApp;
+        AppEntity defaultApp;
           try{
-              defaultApp = registeredApplicationService.findByApplicationId(SecurityConstants.DEFAULT_APP_NAME);
+              defaultApp = appService.findByApplicationId(SecurityConstants.DEFAULT_APP_NAME);
               printDefaultAppInfo(defaultApp);
           }  catch (NoResultException e){
 
-              defaultApp = registeredApplicationService.register( SecurityConstants.DEFAULT_APP_NAME,
+              defaultApp = appService.register( SecurityConstants.DEFAULT_APP_NAME,
                                                                 SecurityConstants.DEFAULT_PASSWORD,
                                                                 SecurityConstants.ROLE_ADMIN);
               LOGGER.info("First run of the application");
@@ -36,8 +36,8 @@ public class DefaultAppConfiguration {
           }
     }
 
-    private void printDefaultAppInfo(RegisteredApplicationEntity defaultApp) {
-        LOGGER.info("Application id: {}", defaultApp.getApplicationId());
+    private void printDefaultAppInfo(AppEntity defaultApp) {
+        LOGGER.info("Application id: {}", defaultApp.getAppId());
         LOGGER.info("Application password: {}", SecurityConstants.DEFAULT_PASSWORD);
     }
 }

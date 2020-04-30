@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 import uk.gergely.kiss.configurationprovider.security.configuration.DefaultAppConfiguration;
-
+@EnableSwagger2
 @SpringBootApplication
 public class ConfigurationProviderApplication {
 

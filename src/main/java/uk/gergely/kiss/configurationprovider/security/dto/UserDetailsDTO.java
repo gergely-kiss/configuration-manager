@@ -1,9 +1,9 @@
-package uk.gergely.kiss.configurationprovider.security.vo;
+package uk.gergely.kiss.configurationprovider.security.dto;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import uk.gergely.kiss.configurationprovider.repository.entity.RegisteredApplicationEntity;
+import uk.gergely.kiss.configurationprovider.data.AppEntity;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -17,10 +17,10 @@ public class UserDetailsDTO implements UserDetails {
         this.userName = userName;
     }
 
-    public UserDetailsDTO(RegisteredApplicationEntity registeredApplicationEntity) {
-        this.userName = registeredApplicationEntity.getApplicationId();
-        this.password = registeredApplicationEntity.getPassword();
-        this.role = registeredApplicationEntity.getRole();
+    public UserDetailsDTO(AppEntity appEntity) {
+        this.userName = appEntity.getAppId();
+        this.password = appEntity.getAppInfo();
+        this.role = appEntity.getRole();
     }
 
     @Override

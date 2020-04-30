@@ -1,8 +1,9 @@
-package uk.gergely.kiss.configurationprovider.repository;
+package uk.gergely.kiss.configurationprovider.data;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 
@@ -10,6 +11,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 public class PropertyEntity {
 
     @Id
