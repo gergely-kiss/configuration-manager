@@ -4,6 +4,6 @@ import org.json.JSONObject;
 
 public interface APIOperationsService {
 
-    JSONObject operate(String operationId, JSONObject request);
+    JSONObject operate(String operationId, org.json.simple.JSONObject request);
 
 }

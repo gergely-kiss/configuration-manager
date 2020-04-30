@@ -22,7 +22,7 @@ public class APIOperationsServiceImpl implements APIOperationsService {
     }
 
     @Override
-    public JSONObject operate(String operationId, JSONObject request) {
+    public JSONObject operate(String operationId, org.json.simple.JSONObject request) {
         if (operationId.equalsIgnoreCase(ControllerConstants.REGISTER))
             return register(request);
         else if (operationId.equalsIgnoreCase(ControllerConstants.UN_REGISTER))
@@ -55,7 +55,7 @@ public class APIOperationsServiceImpl implements APIOperationsService {
 
     }
 
-    private JSONObject register(JSONObject request) {
+    private JSONObject register(org.json.simple.JSONObject request) {
         validatePropertyKey(request, ControllerConstants.APP_ID);
         validatePropertyKey(request, ControllerConstants.APP_INFO);
         String appId = String.valueOf(request.get(ControllerConstants.APP_ID));
@@ -67,7 +67,7 @@ public class APIOperationsServiceImpl implements APIOperationsService {
         return registeredApp;
     }
 
-    private JSONObject unRegister(JSONObject request) {
+    private JSONObject unRegister(org.json.simple.JSONObject request) {
         validatePropertyKey(request, ControllerConstants.APP_ID);
         validatePropertyKey(request, ControllerConstants.APP_INFO);
         String appId = String.valueOf(request.get(ControllerConstants.APP_ID));
@@ -100,7 +100,7 @@ public class APIOperationsServiceImpl implements APIOperationsService {
         return response;
     }
 
-    private JSONObject updatePassword(JSONObject request) {
+    private JSONObject updatePassword(org.json.simple.JSONObject request) {
         validatePropertyKey(request, ControllerConstants.APP_ID);
         validatePropertyKey(request, ControllerConstants.APP_INFO);
         validatePropertyKey(request, ControllerConstants.UPDATE_PASSWORD);
@@ -110,7 +110,7 @@ public class APIOperationsServiceImpl implements APIOperationsService {
         return response;
     }
 
-    public JSONObject saveProperty(JSONObject request) {
+    public JSONObject saveProperty(org.json.simple.JSONObject request) {
         validatePropertyKey(request, ControllerConstants.APP_ID);
         validatePropertyKey(request, ControllerConstants.PROPERTY_KEY);
         validatePropertyKey(request, ControllerConstants.PROPERTY_VALUE);
@@ -122,21 +122,21 @@ public class APIOperationsServiceImpl implements APIOperationsService {
         return response;
     }
 
-    private JSONObject removeProperty(JSONObject request) {
+    private JSONObject removeProperty(org.json.simple.JSONObject request) {
         validatePropertyKey(request, ControllerConstants.APP_ID);
         validatePropertyKey(request, ControllerConstants.PROPERTY_KEY);
         propertyService.delete(String.valueOf(request.get(ControllerConstants.APP_ID)), String.valueOf(request.get(ControllerConstants.PROPERTY_KEY)));
         return new JSONObject();
     }
 
-    private JSONObject returnAllProperty(JSONObject request) {
+    private JSONObject returnAllProperty(org.json.simple.JSONObject request) {
         validatePropertyKey(request, ControllerConstants.APP_ID);
         JSONObject response = new JSONObject();
         response.put(String.valueOf(request.get(ControllerConstants.APP_ID)), propertyService.findAllByAppId(String.valueOf(request.get(ControllerConstants.APP_ID))));
         return response;
     }
 
-    private void validatePropertyKey(JSONObject request, String propertyKey) {
+    private void validatePropertyKey(org.json.simple.JSONObject request, String propertyKey) {
         StringBuilder validationErrors = new StringBuilder();
         try {
             request.get(propertyKey);
