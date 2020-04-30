@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
-import uk.gergely.kiss.configurationprovider.data.AppService;
+import uk.gergely.kiss.configurationprovider.data.services.AppService;
 import uk.gergely.kiss.configurationprovider.security.dto.UserDetailsDTO;
 
 @Service

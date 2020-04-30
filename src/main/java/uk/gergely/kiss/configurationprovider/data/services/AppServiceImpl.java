@@ -1,7 +1,9 @@
-package uk.gergely.kiss.configurationprovider.data;
+package uk.gergely.kiss.configurationprovider.data.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import uk.gergely.kiss.configurationprovider.data.entities.AppEntity;
+import uk.gergely.kiss.configurationprovider.data.repositories.AppEntityRepository;
 import uk.gergely.kiss.configurationprovider.security.resources.SecurityConstants;
 
 import javax.management.openmbean.KeyAlreadyExistsException;
@@ -31,7 +33,7 @@ public class AppServiceImpl implements AppService {
         if (isApplicationAlreadyRegistered(appID)) {
             throw new KeyAlreadyExistsException();
         }
-        appInfoService.savePlainPassword(appInfo);
+        appInfoService.saveAppInfo(appInfo);
         return repository.save(new AppEntity(appID, appInfoService.encode(appInfo), role));
     }
 

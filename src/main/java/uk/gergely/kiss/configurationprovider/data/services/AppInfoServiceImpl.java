@@ -1,9 +1,9 @@
-package uk.gergely.kiss.configurationprovider.data;
+package uk.gergely.kiss.configurationprovider.data.services;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import uk.gergely.kiss.configurationprovider.data.entities.AppInfoEntity;
+import uk.gergely.kiss.configurationprovider.data.repositories.AppInfoEntityRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,15 +30,14 @@ public class AppInfoServiceImpl implements AppInfoService {
     }
 
     @Override
-    public List<String> getAllPlanPassword() {
+    public List<String> getAllAppInfo() {
         return repository.findAll().stream().map(AppInfoEntity::getAppInfo).collect(Collectors.toList());
     }
 
     @Override
-    public void savePlainPassword(String appInfo) {
-
-        AppInfoEntity passwordEntity = new AppInfoEntity();
-        passwordEntity.setAppInfo(appInfo);
-        repository.save(passwordEntity);
+    public void saveAppInfo(String appInfo) {
+        AppInfoEntity appInfoEntity = new AppInfoEntity();
+        appInfoEntity.setAppInfo(appInfo);
+        repository.save(appInfoEntity);
     }
 }

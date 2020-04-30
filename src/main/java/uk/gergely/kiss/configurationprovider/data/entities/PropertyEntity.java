@@ -1,4 +1,4 @@
-package uk.gergely.kiss.configurationprovider.data;
+package uk.gergely.kiss.configurationprovider.data.entities;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

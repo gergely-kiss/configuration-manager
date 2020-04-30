@@ -1,4 +1,6 @@
-package uk.gergely.kiss.configurationprovider.data;
+package uk.gergely.kiss.configurationprovider.data.services;
+import uk.gergely.kiss.configurationprovider.data.entities.AppEntity;
+
 import java.util.Set;
 
 public interface AppService {

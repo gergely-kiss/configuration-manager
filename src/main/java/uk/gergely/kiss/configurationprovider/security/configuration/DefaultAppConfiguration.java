@@ -4,9 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import uk.gergely.kiss.configurationprovider.data.AppEntity;
+import uk.gergely.kiss.configurationprovider.data.entities.AppEntity;
 import uk.gergely.kiss.configurationprovider.security.resources.SecurityConstants;
-import uk.gergely.kiss.configurationprovider.data.AppService;
+import uk.gergely.kiss.configurationprovider.data.services.AppService;
 import javax.persistence.NoResultException;
 
 @Component
