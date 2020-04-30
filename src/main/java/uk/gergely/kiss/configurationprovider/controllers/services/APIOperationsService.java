@@ -1,6 +1,6 @@
 package uk.gergely.kiss.configurationprovider.controllers.services;
 
-import org.json.simple.JSONObject;
+import org.json.JSONObject;
 
 public interface APIOperationsService {
 

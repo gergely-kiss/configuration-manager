@@ -1,4 +1,6 @@
-package uk.gergely.kiss.configurationprovider.data;
+package uk.gergely.kiss.configurationprovider.data.services;
+
+import uk.gergely.kiss.configurationprovider.data.entities.PropertyEntity;
 
 import java.util.List;
 

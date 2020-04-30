@@ -1,11 +1,12 @@
 package uk.gergely.kiss.configurationprovider.controllers.services;
 
-import org.json.simple.JSONObject;
+import org.json.JSONObject;
 import org.springframework.stereotype.Service;
+import uk.gergely.kiss.configurationprovider.ConfigurationManagementRuntimeException;
 import uk.gergely.kiss.configurationprovider.controllers.resources.ControllerConstants;
-import uk.gergely.kiss.configurationprovider.data.PropertyService;
-import uk.gergely.kiss.configurationprovider.data.AppInfoService;
-import uk.gergely.kiss.configurationprovider.data.AppService;
+import uk.gergely.kiss.configurationprovider.data.services.PropertyService;
+import uk.gergely.kiss.configurationprovider.data.services.AppInfoService;
+import uk.gergely.kiss.configurationprovider.data.services.AppService;
 
 @Service
 public class APIOperationsServiceImpl implements APIOperationsService {
@@ -39,13 +40,13 @@ public class APIOperationsServiceImpl implements APIOperationsService {
         else if (operationId.equalsIgnoreCase(ControllerConstants.RETURN_ALL_PROPERTY))
             return returnAllProperty(request);
         JSONObject operationOptions = new JSONObject();
-        operationOptions.put(ControllerConstants.REGISTER, "Register new application. Required keys: " +ControllerConstants.APP_ID + " " + ControllerConstants.APP_INFO + "(existing password)");
-        operationOptions.put(ControllerConstants.UN_REGISTER, "Remove an already existing application. Required keys:"+ControllerConstants.APP_ID + " " + ControllerConstants.APP_INFO +"(existing password)."+" Warning: this operation will remove every already existing property related to that application too!");
+        operationOptions.put(ControllerConstants.REGISTER, "Register new application. Required keys: " + ControllerConstants.APP_ID + " " + ControllerConstants.APP_INFO + "(existing password)");
+        operationOptions.put(ControllerConstants.UN_REGISTER, "Remove an already existing application. Required keys:" + ControllerConstants.APP_ID + " " + ControllerConstants.APP_INFO + "(existing password)." + " Warning: this operation will remove every already existing property related to that application too!");
         operationOptions.put(ControllerConstants.RETURN_ALL_APP, "Get all registered applications. Request body not processed.");
         operationOptions.put(ControllerConstants.RETURN_ALL_APP_WITH_ALL_PROPERTY, "Get all registered applications and related properties.  Request body not processed.");
-        operationOptions.put(ControllerConstants.UPDATE_PASSWORD, "Change the password. Required keys:" +ControllerConstants.APP_ID + " " + ControllerConstants.APP_INFO + "(existing password) " + ControllerConstants.UPDATE_PASSWORD + " (new password)");
-        operationOptions.put(ControllerConstants.SAVE_PROPERTY, "Add new or update already existing property. Required keys: " +ControllerConstants.APP_ID + " " + ControllerConstants.PROPERTY_KEY + " " + ControllerConstants.PROPERTY_VALUE);
-        operationOptions.put(ControllerConstants.REMOVE_PROPERTY, "Remove already existing property. Required keys: " +ControllerConstants.APP_ID + " " + ControllerConstants.PROPERTY_KEY);
+        operationOptions.put(ControllerConstants.UPDATE_PASSWORD, "Change the password. Required keys:" + ControllerConstants.APP_ID + " " + ControllerConstants.APP_INFO + "(existing password) " + ControllerConstants.UPDATE_PASSWORD + " (new password)");
+        operationOptions.put(ControllerConstants.SAVE_PROPERTY, "Add new or update already existing property. Required keys: " + ControllerConstants.APP_ID + " " + ControllerConstants.PROPERTY_KEY + " " + ControllerConstants.PROPERTY_VALUE);
+        operationOptions.put(ControllerConstants.REMOVE_PROPERTY, "Remove already existing property. Required keys: " + ControllerConstants.APP_ID + " " + ControllerConstants.PROPERTY_KEY);
         operationOptions.put(ControllerConstants.RETURN_ALL_PROPERTY, "Return all already existing property. Required keys: " + ControllerConstants.APP_ID);
         JSONObject response = new JSONObject();
         response.put("Error", "No valid operation find by operation id (" + operationId + ") please use a valid operation id");
@@ -81,8 +82,8 @@ public class APIOperationsServiceImpl implements APIOperationsService {
         appService.findAll().forEach(registeredApplicationEntity -> {
             JSONObject company = new JSONObject();
             company.put(ControllerConstants.APP_ID, registeredApplicationEntity.getAppId());
-            appInfoService.getAllPlanPassword().stream().filter(plainPassword -> appInfoService.isMatch(plainPassword, registeredApplicationEntity.getAppInfo())).findFirst().ifPresent(plainPassword ->
-                company.put(ControllerConstants.APP_INFO, plainPassword));
+            appInfoService.getAllAppInfo().stream().filter(plainPassword -> appInfoService.isMatch(plainPassword, registeredApplicationEntity.getAppInfo())).findFirst().ifPresent(plainPassword ->
+                    company.put(ControllerConstants.APP_INFO, plainPassword));
             response.put(registeredApplicationEntity.getAppId(), company);
         });
         return response;
@@ -105,7 +106,7 @@ public class APIOperationsServiceImpl implements APIOperationsService {
         validatePropertyKey(request, ControllerConstants.UPDATE_PASSWORD);
         appService.updatePassword(appService.findByApplicationId(String.valueOf(request.get(ControllerConstants.PROPERTY_KEY))), String.valueOf(request.get(ControllerConstants.UPDATE_PASSWORD)));
         JSONObject response = new JSONObject();
-        response.put("update password ", "processed" );
+        response.put("update password ", "processed");
         return response;
     }
 
@@ -143,7 +144,7 @@ public class APIOperationsServiceImpl implements APIOperationsService {
             validationErrors.append(noFiledFound(propertyKey));
         }
         if (validationErrors.length() > 0) {
-            throw new RuntimeException(validationErrors.toString());
+            throw new ConfigurationManagementRuntimeException(validationErrors.toString());
         }
     }
 

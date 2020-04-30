@@ -1,4 +1,4 @@
-package uk.gergely.kiss.configurationprovider.data;
+package uk.gergely.kiss.configurationprovider.data.services;
 
 import java.util.List;
 
@@ -6,7 +6,7 @@ public interface AppInfoService {
 
     String encode(String appInfo);
     boolean isMatch(String appInfo, String encodedPassword);
-    List<String> getAllPlanPassword();
-    void savePlainPassword(String appInfo);
+    List<String> getAllAppInfo();
+    void saveAppInfo(String appInfo);
 
 }

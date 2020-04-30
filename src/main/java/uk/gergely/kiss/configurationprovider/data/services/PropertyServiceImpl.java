@@ -1,8 +1,8 @@
-package uk.gergely.kiss.configurationprovider.data;
+package uk.gergely.kiss.configurationprovider.data.services;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import uk.gergely.kiss.configurationprovider.data.entities.PropertyEntity;
+import uk.gergely.kiss.configurationprovider.data.repositories.PropertyEntityRepository;
 
 import javax.persistence.NoResultException;
 import java.util.List;
