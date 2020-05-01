@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>uk.gergely.kiss</groupId>
 	<artifactId>configuration-provider</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0-SNAPSHOT</version>
 	<name>configuration-provider</name>
 	<description>configuration and other information provider application for other applications</description>
 
