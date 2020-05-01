@@ -9,8 +9,7 @@ import uk.gergely.kiss.configurationprovider.security.configuration.DefaultAppCo
 public class ConfigurationProviderApplication {
 
     public static void main(String[] args) {
-        ConfigurableApplicationContext context =
-                SpringApplication.run(ConfigurationProviderApplication.class, args);
+        ConfigurableApplicationContext context = SpringApplication.run(ConfigurationProviderApplication.class, args);
         context.getBean(DefaultAppConfiguration.class).registerDefaultApplication();
     }
 
