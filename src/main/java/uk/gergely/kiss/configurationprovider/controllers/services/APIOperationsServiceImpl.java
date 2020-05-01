@@ -7,10 +7,11 @@ import uk.gergely.kiss.configurationprovider.controllers.resources.ControllerCon
 import uk.gergely.kiss.configurationprovider.data.services.PropertyService;
 import uk.gergely.kiss.configurationprovider.data.services.AppInfoService;
 import uk.gergely.kiss.configurationprovider.data.services.AppService;
+import uk.gergely.kiss.configurationprovider.security.dto.UserDetailsDTO;
+import uk.gergely.kiss.configurationprovider.security.resources.SecurityConstants;
 
 @Service
 public class APIOperationsServiceImpl implements APIOperationsService {
-
     private final AppService appService;
     private final AppInfoService appInfoService;
     private final PropertyService propertyService;
@@ -22,25 +23,36 @@ public class APIOperationsServiceImpl implements APIOperationsService {
     }
 
     @Override
-    public JSONObject operate(String operationId, org.json.simple.JSONObject request) {
-        if (operationId.equalsIgnoreCase(ControllerConstants.REGISTER))
+    public JSONObject operate(String operationId, org.json.simple.JSONObject request, UserDetailsDTO userDetailsDTO) {
+
+        if (operationId.equalsIgnoreCase(ControllerConstants.REGISTER)) {
+            isAuthorized(userDetailsDTO);
             return register(request);
-        else if (operationId.equalsIgnoreCase(ControllerConstants.UN_REGISTER))
+        } else if (operationId.equalsIgnoreCase(ControllerConstants.UN_REGISTER)) {
+            isAuthorized(userDetailsDTO);
             return unRegister(request);
-        else if (operationId.equalsIgnoreCase(ControllerConstants.RETURN_ALL_APP))
+        } else if (operationId.equalsIgnoreCase(ControllerConstants.RETURN_ALL_APP)) {
+            isAuthorized(userDetailsDTO);
             return returnAllApp();
-        else if (operationId.equalsIgnoreCase(ControllerConstants.RETURN_ALL_APP_WITH_ALL_PROPERTY))
+        } else if (operationId.equalsIgnoreCase(ControllerConstants.RETURN_ALL_APP_WITH_ALL_PROPERTY)) {
+            isAuthorized(userDetailsDTO);
             return returnAllAppWithAllProperty();
-        else if (operationId.equalsIgnoreCase(ControllerConstants.UPDATE_PASSWORD))
+        } else if (operationId.equalsIgnoreCase(ControllerConstants.UPDATE_PASSWORD)) {
+            isAuthorized(userDetailsDTO, String.valueOf(request.get(ControllerConstants.APP_ID)));
             return updatePassword(request);
-        else if (operationId.equalsIgnoreCase(ControllerConstants.SAVE_PROPERTY))
+        } else if (operationId.equalsIgnoreCase(ControllerConstants.SAVE_PROPERTY)) {
+            isAuthorized(userDetailsDTO, String.valueOf(request.get(ControllerConstants.APP_ID)));
             return saveProperty(request);
-        else if (operationId.equalsIgnoreCase(ControllerConstants.REMOVE_PROPERTY))
+        } else if (operationId.equalsIgnoreCase(ControllerConstants.REMOVE_PROPERTY)) {
+            isAuthorized(userDetailsDTO, String.valueOf(request.get(ControllerConstants.APP_ID)));
             return removeProperty(request);
-        else if (operationId.equalsIgnoreCase(ControllerConstants.RETURN_ALL_PROPERTY))
+        } else if (operationId.equalsIgnoreCase(ControllerConstants.RETURN_ALL_PROPERTY)) {
+            isAuthorized(userDetailsDTO, String.valueOf(request.get(ControllerConstants.APP_ID)));
             return returnAllProperty(request);
+        }
+
         JSONObject operationOptions = new JSONObject();
-        operationOptions.put(ControllerConstants.REGISTER, "Register new application. Required keys: " + ControllerConstants.APP_ID + " " + ControllerConstants.APP_INFO + "(existing password)");
+        operationOptions.put(ControllerConstants.REGISTER, "Register new application. Required keys: " + ControllerConstants.APP_ID + " " + ControllerConstants.APP_INFO);
         operationOptions.put(ControllerConstants.UN_REGISTER, "Remove an already existing application. Required keys:" + ControllerConstants.APP_ID + " " + ControllerConstants.APP_INFO + "(existing password)." + " Warning: this operation will remove every already existing property related to that application too!");
         operationOptions.put(ControllerConstants.RETURN_ALL_APP, "Get all registered applications. Request body not processed.");
         operationOptions.put(ControllerConstants.RETURN_ALL_APP_WITH_ALL_PROPERTY, "Get all registered applications and related properties.  Request body not processed.");
@@ -53,6 +65,18 @@ public class APIOperationsServiceImpl implements APIOperationsService {
         response.put("Operation Options", operationOptions);
         return response;
 
+    }
+
+    private void isAuthorized(UserDetailsDTO userDetailsDTO, String appId) {
+        if (!userDetailsDTO.getUsername().equalsIgnoreCase(appId)) {
+            throw new ConfigurationManagementRuntimeException(userDetailsDTO.getUsername() + " is " + SecurityConstants.UN_AUTHORIZED + " for " + appId);
+        }
+    }
+
+    private void isAuthorized(UserDetailsDTO userDetailsDTO) {
+        if (!userDetailsDTO.getAuthorities().contains(SecurityConstants.ROLE_ADMIN)) {
+            throw new ConfigurationManagementRuntimeException(SecurityConstants.UN_AUTHORIZED);
+        }
     }
 
     private JSONObject register(org.json.simple.JSONObject request) {
@@ -106,7 +130,7 @@ public class APIOperationsServiceImpl implements APIOperationsService {
         validatePropertyKey(request, ControllerConstants.UPDATE_PASSWORD);
         appService.updatePassword(appService.findByApplicationId(String.valueOf(request.get(ControllerConstants.PROPERTY_KEY))), String.valueOf(request.get(ControllerConstants.UPDATE_PASSWORD)));
         JSONObject response = new JSONObject();
-        response.put("update password ", "processed");
+        response.put("update password ", ControllerConstants.PROCESSED);
         return response;
     }
 
@@ -118,15 +142,17 @@ public class APIOperationsServiceImpl implements APIOperationsService {
         propertyService.save(String.valueOf(request.get(ControllerConstants.PROPERTY_KEY)),
                 String.valueOf(request.get(ControllerConstants.PROPERTY_VALUE)),
                 String.valueOf(request.get(ControllerConstants.APP_ID)));
-        response.put("saving config", "processed");
+        response.put("saving property", ControllerConstants.PROCESSED);
         return response;
     }
 
     private JSONObject removeProperty(org.json.simple.JSONObject request) {
         validatePropertyKey(request, ControllerConstants.APP_ID);
         validatePropertyKey(request, ControllerConstants.PROPERTY_KEY);
+        JSONObject response = new JSONObject();
         propertyService.delete(String.valueOf(request.get(ControllerConstants.APP_ID)), String.valueOf(request.get(ControllerConstants.PROPERTY_KEY)));
-        return new JSONObject();
+        response.put("removing config", ControllerConstants.PROCESSED);
+        return response;
     }
 
     private JSONObject returnAllProperty(org.json.simple.JSONObject request) {
